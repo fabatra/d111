@@ -22,13 +22,13 @@
     .container { max-width: 800px; width: 100%; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
 
     h1 { color: var(--primary); font-size: 1.5rem; text-align: center; margin-bottom: 5px; }
-    p.subtitle { text-align: center; color: #64748b; font-size: 0.95rem; margin-top: 0; margin-bottom: 25px; }
+    p.subtitle { text-align: center; color: #64748b; font-size: 0.95rem; margin-top: 0; margin-bottom: 20px; }
 
     .form-group { margin-bottom: 18px; }
     label { font-weight: bold; display: block; margin-bottom: 6px; }
     input[type="text"], input[type="email"], select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
 
-    .btn { background: var(--primary-light); color: white; border: none; padding: 12px 20px; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold; width: 100%; transition: background 0.2s; }
+    .btn { background: var(--primary-light); color: white; border: none; padding: 12px 20px; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold; width: 100%; transition: background 0.2s; display: block; text-align: center; }
     .btn:hover { background: var(--primary); }
     .btn-secondary { background: #64748b; margin-top: 10px; }
     .btn-secondary:hover { background: #475569; }
@@ -40,7 +40,7 @@
       padding: 12px 18px;
       border-radius: 8px;
       text-decoration: none;
-      display: inline-block;
+      display: block;
       text-align: center;
       margin-bottom: 20px;
       width: 100%;
@@ -49,27 +49,18 @@
     }
     .btn-pdf:hover { background: #b45309; }
 
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%; /* Proporção 16:9 */
-      height: 0;
-      overflow: hidden;
-      max-width: 100%;
-      background: #000;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      margin-bottom: 20px;
+    .revision-box { 
+      background: #eff6ff; 
+      border-left: 5px solid var(--primary-light); 
+      padding: 18px; 
+      border-radius: 8px; 
+      margin-top: 15px;
+      margin-bottom: 20px; 
+      display: none; 
     }
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
+    .revision-box.show {
+      display: block !important;
     }
-
-    .revision-box { background: #eff6ff; border-left: 5px solid var(--primary-light); padding: 18px; border-radius: 8px; margin-bottom: 20px; display: none; }
     .revision-box h3 { margin-top: 0; color: var(--primary); font-size: 1.15rem; }
 
     .example-card {
@@ -94,7 +85,26 @@
       color: #0f172a;
     }
 
-    .option-btn { background: #f1f5f9; border: 1px solid var(--border); padding: 14px 18px; margin-bottom: 10px; border-radius: 8px; width: 100%; text-align: left; cursor: pointer; font-size: 1.05rem; font-weight: 500; transition: all 0.2s; }
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .option-btn { background: #f1f5f9; border: 1px solid var(--border); padding: 14px 18px; margin-bottom: 10px; border-radius: 8px; width: 100%; text-align: left; cursor: pointer; font-size: 1.05rem; font-weight: 500; transition: all 0.2s; display: block; }
     .option-btn:hover { background: #e2e8f0; }
     .option-btn.selected { background: #dbeafe; border-color: var(--primary-light); font-weight: bold; color: var(--primary); }
 
@@ -107,6 +117,8 @@
 
     .progress { height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
     .progress-bar { height: 100%; background: var(--primary-light); width: 0%; transition: width 0.3s; }
+
+    .alert-error { background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; font-weight: bold; display: none; }
 
     .report-header { border-bottom: 2px solid var(--primary); padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
     .report-header-title { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
@@ -138,25 +150,32 @@
 
 <div class="container">
   
-  <!-- ETAPA 1: CADASTRO DO ALUNO -->
+  <!-- ETAPA 1: CADASTRO E VÍDEO -->
   <div id="step-1" class="step active">
     <h1>Avaliação Diagnóstica de Matemática</h1>
     <p class="subtitle">Descritor D111 - Poliedros, Corpos Redondos e Planificações</p>
 
-    <!-- PLAYER DO YOUTUBE INCORPORADO (FORMATO EMBED CORRETO) -->
     <div class="form-group no-print">
-      <label style="font-weight: bold; font-size: 1.05rem; color: var(--primary); margin-bottom: 10px; display: block; text-align: center;">
+      <label style="color: var(--primary); font-size: 1rem; margin-bottom: 8px;">
         🎬 Assista ao Vídeo de Resumo antes de Iniciar:
       </label>
       <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/YuyWcbulu2M?rel=0" title="Resumo D111 - Matemática" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe 
+          src="https://www.youtube.com/embed/YuyWcbulu2M" 
+          title="Vídeo Explicativo D111" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
       </div>
     </div>
 
-    <!-- BOTÃO PARA ABRIR O CADERNO DE QUESTÕES EM PDF (MESMA ABA REAPROVEITADA) -->
     <a href="prova.pdf" target="caderno_prova" class="btn-pdf no-print">
-      📄 Clique Aqui para Abrir o Caderno de Questões (PDF)
+      📄 Clique Aqui para Abrir / Consultar o Caderno de Questões (PDF)
     </a>
+
+    <div id="validation-alert" class="alert-error">
+      ⚠️ Por favor, informe seu nome completo e escolha sua turma para avançar!
+    </div>
 
     <div class="form-group">
       <label for="student-name">Nome Completo do Aluno:</label>
@@ -173,7 +192,9 @@
       </select>
     </div>
 
-    <button class="btn no-print" onclick="toggleRevision()">📖 Abrir Revisão Teórica e Exemplo Resolvido</button>
+    <button id="btn-toggle-rev" type="button" class="btn no-print" onclick="toggleRevision()">
+      📖 Abrir / Fechar Revisão Teórica
+    </button>
 
     <div id="revision-content" class="revision-box">
       <h3>Resumo Teórico: Planificação e Vistas Geométricas (D111)</h3>
@@ -197,14 +218,15 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
       </div>
     </div>
 
-    <button class="btn" style="margin-top: 15px;" onclick="startQuiz()">Iniciar Resposta do Quiz</button>
+    <button id="btn-start-quiz" type="button" class="btn" style="margin-top: 20px;" onclick="startQuiz()">
+      Iniciar Resposta do Quiz ➔
+    </button>
   </div>
 
   <!-- ETAPA 2: QUIZ INTERATIVO -->
   <div id="step-2" class="step">
     <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
     
-    <!-- BOTÃO DE CONSULTA RÁPIDA AO PDF -->
     <a href="prova.pdf" target="caderno_prova" class="btn-pdf no-print" style="margin-bottom: 15px; padding: 8px 12px; font-size: 0.9rem;">
       📄 Consultar Questão no PDF da Prova
     </a>
@@ -212,17 +234,16 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
     <h3 id="question-title" style="color: var(--primary); margin-top: 5px;">Questão 1</h3>
     <p id="question-instruction" style="font-size: 1.05rem; line-height: 1.5; font-weight: 500;"></p>
 
-    <!-- OPÇÕES DE RESPOSTA -->
     <div id="options-container" style="margin-top: 15px;"></div>
 
-    <button id="btn-verify" class="btn no-print" style="margin-top: 15px;" onclick="verifyAnswer()">Verificar Resposta</button>
+    <button id="btn-verify" type="button" class="btn no-print" style="margin-top: 15px;" onclick="verifyAnswer()">Verificar Resposta</button>
 
     <div id="feedback" class="feedback-box"></div>
 
-    <button id="btn-next" class="btn no-print" style="margin-top: 15px; display: none;" onclick="nextQuestion()">Próxima Questão ➔</button>
+    <button id="btn-next" type="button" class="btn no-print" style="margin-top: 15px; display: none;" onclick="nextQuestion()">Próxima Questão ➔</button>
   </div>
 
-  <!-- ETAPA 3: RELATÓRIO FINAL / PROVA CORRIGIDA -->
+  <!-- ETAPA 3: RELATÓRIO FINAL -->
   <div id="step-3" class="step">
     <div class="report-header">
       <div>
@@ -246,27 +267,23 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
       <div id="pedagogical-content"></div>
     </div>
 
-    <!-- BOTÕES DE AÇÃO E ENVIO -->
     <div class="action-card no-print">
       <div class="form-group">
         <label for="res-email-input">E-mail para Envio da Cópia da Prova (Opcional):</label>
         <input type="email" id="res-email-input" placeholder="exemplo@email.com">
       </div>
 
-      <button id="btn-send-email" class="btn" onclick="sendEvaluation()">📄 Enviar Prova Corrigida (PDF)</button>
-      <button class="btn btn-secondary" onclick="window.print()" style="margin-top: 10px;">🖨️ Imprimir / Salvar Cópia Local em PDF</button>
-      <button class="btn btn-secondary" onclick="location.reload()" style="margin-top: 10px;">🔄 Refazer Avaliação</button>
+      <button id="btn-send-email" type="button" class="btn" onclick="sendEvaluation()">📄 Enviar Prova Corrigida (Google Drive / E-mail)</button>
+      <button type="button" class="btn btn-secondary" onclick="window.print()" style="margin-top: 10px;">🖨️ Imprimir / Salvar Cópia Local em PDF</button>
+      <button type="button" class="btn btn-secondary" onclick="location.reload()" style="margin-top: 10px;">🔄 Refazer Avaliação</button>
     </div>
   </div>
 
 </div>
 
 <script>
-  // CONFIGURAÇÕES DO GOOGLE APPS SCRIPT / DRIVE
-  const scriptUrl = "SUA_URL_DO_WEB_APP_DO_GOOGLE_APPS_SCRIPT_AQUI";
-  const DESTINATION_DRIVE_FOLDER = "ID_DA_SUA_PASTA_NO_DRIVE";
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbxzlZAUcL0PUjg6t8eviMt-l2HDowQ2XfWuJISNEzd_a2YeIgVlWGssLD9Cyofu2ZZOxA/exec";
 
-  // QUESTÕES DO DESCRITOR D111
   const questions = [
     {
       title: "ITEM 1 - (AMA - 2024)",
@@ -278,7 +295,7 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
         "D) Alternativa D",
         "E) Alternativa E"
       ],
-      correct: 4, // Alternativa E
+      correct: 4,
       explanation: "Gabarito: Alternativa E. O prisma hexagonal reto possui 2 bases hexagonais situadas em lados opostos de uma faixa de 6 retângulos (posicionadas no 2º e no 5º retângulo)."
     },
     {
@@ -290,7 +307,7 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
         "C) Desenhos II e III.",
         "D) Desenhos II e IV."
       ],
-      correct: 0, // Alternativa A
+      correct: 0,
       explanation: "Gabarito: Alternativa A. Os moldes (I) e (II) fecham perfeitamente um cubo sem sobreposição de faces."
     },
     {
@@ -302,7 +319,7 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
         "C) Alternativa C",
         "D) Alternativa D"
       ],
-      correct: 0, // Alternativa A
+      correct: 0,
       explanation: "Gabarito: Alternativa A. A pirâmide pentagonal é composta por 1 base pentagonal regular e 5 faces triangulares dispostas ao redor."
     },
     {
@@ -314,7 +331,7 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
         "C) Alternativa C",
         "D) Alternativa D"
       ],
-      correct: 3, // Alternativa D
+      correct: 3,
       explanation: "Gabarito: Alternativa D. A planificação de um cone reto é composta por um setor circular (superfície lateral) e um círculo (sua base)."
     },
     {
@@ -326,7 +343,7 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
         "C) Prisma triangular reto.",
         "D) Paralelepípedo / Prisma quadrangular."
       ],
-      correct: 2, // Alternativa C
+      correct: 2,
       explanation: "Gabarito: Alternativa C. A planificação apresentada possui 3 retângulos e 2 bases triangulares, formando um Prisma Triangular Reto."
     }
   ];
@@ -340,18 +357,23 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
 
   function toggleRevision() {
     const rev = document.getElementById("revision-content");
-    rev.style.display = rev.style.display === "block" ? "none" : "block";
+    if (rev) {
+      rev.classList.toggle("show");
+    }
   }
 
   function startQuiz() {
+    const alertBox = document.getElementById("validation-alert");
     studentName = document.getElementById("student-name").value.trim();
     studentClass = document.getElementById("student-class").value;
 
     if (!studentName || !studentClass) {
-      alert("Por favor, preencha seu nome completo e selecione sua turma antes de iniciar!");
+      if (alertBox) alertBox.style.display = "block";
+      alert("Por favor, preencha seu nome completo e selecione sua turma antes de continuar!");
       return;
     }
 
+    if (alertBox) alertBox.style.display = "none";
     document.getElementById("step-1").classList.remove("active");
     document.getElementById("step-2").classList.add("active");
     loadQuestion();
@@ -375,9 +397,10 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
 
     q.options.forEach((optText, idx) => {
       const btn = document.createElement("button");
+      btn.type = "button";
       btn.className = "option-btn";
       btn.innerText = optText;
-      btn.onclick = () => selectOption(idx, btn);
+      btn.onclick = function() { selectOption(idx, btn); };
       container.appendChild(btn);
     });
   }
@@ -498,7 +521,6 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
       turma: studentClass,
       email: targetEmail,
       nota: (score / questions.length * 5.0).toFixed(1).replace('.', ','),
-      folderUrl: DESTINATION_DRIVE_FOLDER,
       htmlContent: fullHtml
     };
 
@@ -513,23 +535,28 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
     }).then(() => {
       let msg = "✅ Prova salva com sucesso na pasta do Google Drive!";
       if (targetEmail) {
-        msg += "
-✉️ Uma cópia em PDF também foi enviada para o e-mail: " + targetEmail;
+        msg += "\n✉️ Uma cópia em PDF também foi enviada para o e-mail: " + targetEmail;
       }
       alert(msg);
       if (btn) {
-        btn.innerText = "📄 Enviar Prova Corrigida (PDF)";
+        btn.innerText = "📄 Enviar Prova Corrigida (Google Drive / E-mail)";
         btn.disabled = false;
       }
     }).catch(err => {
       alert("Ocorreu uma falha na conexão. A janela de impressão local do PDF será aberta.");
       if (btn) {
-        btn.innerText = "📄 Enviar Prova Corrigida (PDF)";
+        btn.innerText = "📄 Enviar Prova Corrigida (Google Drive / E-mail)";
         btn.disabled = false;
       }
       window.print();
     });
   }
+
+  window.toggleRevision = toggleRevision;
+  window.startQuiz = startQuiz;
+  window.verifyAnswer = verifyAnswer;
+  window.nextQuestion = nextQuestion;
+  window.sendEvaluation = sendEvaluation;
 </script>
 </body>
 </html>
