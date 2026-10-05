@@ -113,7 +113,7 @@
     .feedback-box.incorrect { background: #fee2e2; color: #7f1d1d; border: 1px solid #fca5a5; }
 
     .step { display: none; }
-    .step.active { display: block; }
+    .step.active { display: block !important; }
 
     .progress { height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
     .progress-bar { height: 100%; background: var(--primary-light); width: 0%; transition: width 0.3s; }
@@ -192,7 +192,7 @@
       </select>
     </div>
 
-    <button id="btn-toggle-rev" type="button" class="btn no-print" onclick="toggleRevision()">
+    <button id="btn-toggle-rev" type="button" class="btn no-print">
       📖 Abrir / Fechar Revisão Teórica
     </button>
 
@@ -218,7 +218,7 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
       </div>
     </div>
 
-    <button id="btn-start-quiz" type="button" class="btn" style="margin-top: 20px;" onclick="startQuiz()">
+    <button id="btn-start-quiz" type="button" class="btn" style="margin-top: 20px;">
       Iniciar Resposta do Quiz ➔
     </button>
   </div>
@@ -236,11 +236,11 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
 
     <div id="options-container" style="margin-top: 15px;"></div>
 
-    <button id="btn-verify" type="button" class="btn no-print" style="margin-top: 15px;" onclick="verifyAnswer()">Verificar Resposta</button>
+    <button id="btn-verify" type="button" class="btn no-print" style="margin-top: 15px;">Verificar Resposta</button>
 
     <div id="feedback" class="feedback-box"></div>
 
-    <button id="btn-next" type="button" class="btn no-print" style="margin-top: 15px; display: none;" onclick="nextQuestion()">Próxima Questão ➔</button>
+    <button id="btn-next" type="button" class="btn no-print" style="margin-top: 15px; display: none;">Próxima Questão ➔</button>
   </div>
 
   <!-- ETAPA 3: RELATÓRIO FINAL -->
@@ -273,15 +273,16 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
         <input type="email" id="res-email-input" placeholder="exemplo@email.com">
       </div>
 
-      <button id="btn-send-email" type="button" class="btn" onclick="sendEvaluation()">📄 Enviar Prova Corrigida (Google Drive / E-mail)</button>
-      <button type="button" class="btn btn-secondary" onclick="window.print()" style="margin-top: 10px;">🖨️ Imprimir / Salvar Cópia Local em PDF</button>
-      <button type="button" class="btn btn-secondary" onclick="location.reload()" style="margin-top: 10px;">🔄 Refazer Avaliação</button>
+      <button id="btn-send-email" type="button" class="btn">📄 Enviar Prova Corrigida (Google Drive / E-mail)</button>
+      <button id="btn-print" type="button" class="btn btn-secondary" style="margin-top: 10px;">🖨️ Imprimir / Salvar Cópia Local em PDF</button>
+      <button id="btn-reload" type="button" class="btn btn-secondary" style="margin-top: 10px;">🔄 Refazer Avaliação</button>
     </div>
   </div>
 
 </div>
 
 <script>
+  // URL do Google Apps Script
   const scriptUrl = "https://script.google.com/macros/s/AKfycbxzlZAUcL0PUjg6t8eviMt-l2HDowQ2XfWuJISNEzd_a2YeIgVlWGssLD9Cyofu2ZZOxA/exec";
 
   const questions = [
@@ -344,7 +345,7 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
         "D) Paralelepípedo / Prisma quadrangular."
       ],
       correct: 2,
-      explanation: "Gabarito: Alternativa C. A planificação apresentada possui 3 retângulos e 2 bases triangulares, formando um Prisma Triangular Reto."
+      explanation: "Gabarito: Alternativa C. A planificação apresentada possui 3 retângulos e 2 bases triangulares, forming um Prisma Triangular Reto."
     }
   ];
 
@@ -364,8 +365,11 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
 
   function startQuiz() {
     const alertBox = document.getElementById("validation-alert");
-    studentName = document.getElementById("student-name").value.trim();
-    studentClass = document.getElementById("student-class").value;
+    const nameInput = document.getElementById("student-name");
+    const classSelect = document.getElementById("student-class");
+
+    studentName = nameInput ? nameInput.value.trim() : "";
+    studentClass = classSelect ? classSelect.value : "";
 
     if (!studentName || !studentClass) {
       if (alertBox) alertBox.style.display = "block";
@@ -374,34 +378,45 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
     }
 
     if (alertBox) alertBox.style.display = "none";
-    document.getElementById("step-1").classList.remove("active");
-    document.getElementById("step-2").classList.add("active");
+    
+    const step1 = document.getElementById("step-1");
+    const step2 = document.getElementById("step-2");
+    if (step1) step1.classList.remove("active");
+    if (step2) step2.classList.add("active");
+
     loadQuestion();
   }
 
   function loadQuestion() {
     const q = questions[currentQuestion];
-    document.getElementById("question-title").innerText = q.title;
-    document.getElementById("question-instruction").innerText = q.instruction;
+    const qTitle = document.getElementById("question-title");
+    const qInst = document.getElementById("question-instruction");
+    if (qTitle) qTitle.innerText = q.title;
+    if (qInst) qInst.innerText = q.instruction;
 
     const pct = ((currentQuestion) / questions.length) * 100;
-    document.getElementById("progress-bar").style.width = pct + "%";
+    const pBar = document.getElementById("progress-bar");
+    if (pBar) pBar.style.width = pct + "%";
 
     const container = document.getElementById("options-container");
-    container.innerHTML = "";
+    if (container) container.innerHTML = "";
 
     selectedOption = null;
-    document.getElementById("feedback").style.display = "none";
-    document.getElementById("btn-verify").style.display = "block";
-    document.getElementById("btn-next").style.display = "none";
+    const fb = document.getElementById("feedback");
+    const btnV = document.getElementById("btn-verify");
+    const btnN = document.getElementById("btn-next");
+
+    if (fb) fb.style.display = "none";
+    if (btnV) btnV.style.display = "block";
+    if (btnN) btnN.style.display = "none";
 
     q.options.forEach((optText, idx) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "option-btn";
       btn.innerText = optText;
-      btn.onclick = function() { selectOption(idx, btn); };
-      container.appendChild(btn);
+      btn.addEventListener("click", function() { selectOption(idx, btn); });
+      if (container) container.appendChild(btn);
     });
   }
 
@@ -432,18 +447,21 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
     if (isCorrect) score += 1;
 
     const feedbackBox = document.getElementById("feedback");
-    feedbackBox.style.display = "block";
-
-    if (isCorrect) {
-      feedbackBox.className = "feedback-box correct";
-      feedbackBox.innerHTML = "<b>✅ Resposta Correta!</b><br>" + q.explanation;
-    } else {
-      feedbackBox.className = "feedback-box incorrect";
-      feedbackBox.innerHTML = "<b>❌ Resposta Incorreta!</b><br><b>A alternativa correta é:</b> " + q.options[q.correct] + "<br><br><b>Explicação:</b> " + q.explanation;
+    if (feedbackBox) {
+      feedbackBox.style.display = "block";
+      if (isCorrect) {
+        feedbackBox.className = "feedback-box correct";
+        feedbackBox.innerHTML = "<b>✅ Resposta Correta!</b><br>" + q.explanation;
+      } else {
+        feedbackBox.className = "feedback-box incorrect";
+        feedbackBox.innerHTML = "<b>❌ Resposta Incorreta!</b><br><b>A alternativa correta é:</b> " + q.options[q.correct] + "<br><br><b>Explicação:</b> " + q.explanation;
+      }
     }
 
-    document.getElementById("btn-verify").style.display = "none";
-    document.getElementById("btn-next").style.display = "block";
+    const btnV = document.getElementById("btn-verify");
+    const btnN = document.getElementById("btn-next");
+    if (btnV) btnV.style.display = "none";
+    if (btnN) btnN.style.display = "block";
 
     const optionButtons = document.querySelectorAll(".option-btn");
     optionButtons.forEach(b => b.disabled = true);
@@ -459,54 +477,64 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
   }
 
   function finishQuiz() {
-    document.getElementById("step-2").classList.remove("active");
-    document.getElementById("step-3").classList.add("active");
+    const step2 = document.getElementById("step-2");
+    const step3 = document.getElementById("step-3");
+    if (step2) step2.classList.remove("active");
+    if (step3) step3.classList.add("active");
 
-    document.getElementById("res-name").innerText = studentName;
-    document.getElementById("res-class").innerText = studentClass;
+    const resName = document.getElementById("res-name");
+    const resClass = document.getElementById("res-class");
+    if (resName) resName.innerText = studentName;
+    if (resClass) resClass.innerText = studentClass;
 
     const pts = (score / questions.length) * 5.0;
     const percent = ((score / questions.length) * 100).toFixed(0);
 
-    document.getElementById("res-score-pts").innerText = pts.toFixed(1).replace('.', ',');
-    document.getElementById("res-percent").innerText = percent;
+    const ptsSpan = document.getElementById("res-score-pts");
+    const pctSpan = document.getElementById("res-percent");
+    if (ptsSpan) ptsSpan.innerText = pts.toFixed(1).replace('.', ',');
+    if (pctSpan) pctSpan.innerText = percent;
 
     const listDiv = document.getElementById("corrected-questions-list");
-    listDiv.innerHTML = "";
+    if (listDiv) {
+      listDiv.innerHTML = "";
+      userAnswers.forEach((ans) => {
+        const item = document.createElement("div");
+        item.className = "corrected-item";
 
-    userAnswers.forEach((ans) => {
-      const item = document.createElement("div");
-      item.className = "corrected-item";
+        const badgeClass = ans.isCorrect ? "status-badge certo" : "status-badge errado";
+        const badgeText = ans.isCorrect ? "CORRETO (+1,0)" : "INCORRETO (0,0)";
 
-      const badgeClass = ans.isCorrect ? "status-badge certo" : "status-badge errado";
-      const badgeText = ans.isCorrect ? "CORRETO (+1,0)" : "INCORRETO (0,0)";
-
-      item.innerHTML = `
-        <div class="corrected-item-head">
-          <span>${ans.questionTitle}</span>
-          <span class="${badgeClass}">${badgeText}</span>
-        </div>
-        <p style="margin: 3px 0;"><b>Sua resposta:</b> ${ans.chosenOption}</p>
-        ${!ans.isCorrect ? `<p style="margin: 3px 0; color: var(--success);"><b>Resposta correta:</b> ${ans.correctOption}</p>` : ''}
-        <div style="background:#f8fafc; padding:10px; border-radius:6px; margin-top:8px; font-size:0.9rem; border:1px solid #e2e8f0;">
-          <b>Explicação Pedagógica:</b> ${ans.explanation}
-        </div>
-      `;
-      listDiv.appendChild(item);
-    });
+        item.innerHTML = `
+          <div class="corrected-item-head">
+            <span>${ans.questionTitle}</span>
+            <span class="${badgeClass}">${badgeText}</span>
+          </div>
+          <p style="margin: 3px 0;"><b>Sua resposta:</b> ${ans.chosenOption}</p>
+          ${!ans.isCorrect ? `<p style="margin: 3px 0; color: var(--success);"><b>Resposta correta:</b> ${ans.correctOption}</p>` : ''}
+          <div style="background:#f8fafc; padding:10px; border-radius:6px; margin-top:8px; font-size:0.9rem; border:1px solid #e2e8f0;">
+            <b>Explicação Pedagógica:</b> ${ans.explanation}
+          </div>
+        `;
+        listDiv.appendChild(item);
+      });
+    }
 
     const pedDiv = document.getElementById("pedagogical-content");
-    if (pts >= 4.0) {
-      pedDiv.innerHTML = "<p><b>Excelente desempenho!</b> O aluno demonstra domínio consolidado na identificação de poliedros, corpos redondos e suas planificações (Descritor D111).</p>";
-    } else if (pts >= 2.5) {
-      pedDiv.innerHTML = "<p><b>Bom desempenho.</b> O aluno reconhece a maioria das figuras simples, mas necessita de atenção à disposição das bases nas planificações de prismas e cones.</p>";
-    } else {
-      pedDiv.innerHTML = "<p><b>Atenção necessária.</b> Recomenda-se a revisão com modelos manipuláveis e montagem de moldes em papel para fortalecer a visão espacial.</p>";
+    if (pedDiv) {
+      if (pts >= 4.0) {
+        pedDiv.innerHTML = "<p><b>Excelente desempenho!</b> O aluno demonstra domínio consolidado na identificação de poliedros, corpos redondos e suas planificações (Descritor D111).</p>";
+      } else if (pts >= 2.5) {
+        pedDiv.innerHTML = "<p><b>Bom desempenho.</b> O aluno reconhece a maioria das figuras simples, mas necessita de atenção à disposição das bases nas planificações de prismas e cones.</p>";
+      } else {
+        pedDiv.innerHTML = "<p><b>Atenção necessária.</b> Recomenda-se a revisão com modelos manipuláveis e montagem de moldes em papel para fortalecer a visão espacial.</p>";
+      }
     }
   }
 
   function sendEvaluation() {
-    const targetEmail = document.getElementById("res-email-input").value.trim();
+    const emailInput = document.getElementById("res-email-input");
+    const targetEmail = emailInput ? emailInput.value.trim() : "";
     const btn = document.getElementById("btn-send-email");
 
     if (btn) {
@@ -552,6 +580,31 @@ Conclusão: A planificação completa possui 2 hexágonos e 6 retângulos.</div>
     });
   }
 
+  // BIND EVENT LISTENERS WHEN DOM IS READY
+  document.addEventListener("DOMContentLoaded", function() {
+    const btnRev = document.getElementById("btn-toggle-rev");
+    if (btnRev) btnRev.addEventListener("click", toggleRevision);
+
+    const btnStart = document.getElementById("btn-start-quiz");
+    if (btnStart) btnStart.addEventListener("click", startQuiz);
+
+    const btnVerify = document.getElementById("btn-verify");
+    if (btnVerify) btnVerify.addEventListener("click", verifyAnswer);
+
+    const btnNext = document.getElementById("btn-next");
+    if (btnNext) btnNext.addEventListener("click", nextQuestion);
+
+    const btnSend = document.getElementById("btn-send-email");
+    if (btnSend) btnSend.addEventListener("click", sendEvaluation);
+
+    const btnPrint = document.getElementById("btn-print");
+    if (btnPrint) btnPrint.addEventListener("click", function() { window.print(); });
+
+    const btnReload = document.getElementById("btn-reload");
+    if (btnReload) btnReload.addEventListener("click", function() { location.reload(); });
+  });
+
+  // EXPOSE TO GLOBAL SCOPE AS FALLBACK FOR INLINE ONCLICK
   window.toggleRevision = toggleRevision;
   window.startQuiz = startQuiz;
   window.verifyAnswer = verifyAnswer;
